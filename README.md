@@ -1,22 +1,32 @@
-# Desafio BackEnd Fusion: **Criar** e **Gerenciar** a Galáxia Inspirada em Star Wars
+# BackEnd Fusion Challenge: **Create** and **Manage** a Star Wars-Inspired Galaxy
 
-## Objetivo
-API backend que permita a criação, gerenciamento e visualização de uma galáxia inspirada em Star Wars, incluindo planetas, sistemas estelares, personagens e naves espaciais.
+## Objective
+Backend API that allows the creation, management and visualization of a Star Wars-inspired galaxy, including planets, star systems, characters and spaceships.
 
-## 🚀 Tecnologias Utilizadas
+## 🚀 Technologies Used
 
 - [NestJS](https://nestjs.com/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Node.js](https://nodejs.org/)
-- [Prisma](https://www.prisma.io/) ou TypeORM
-- [PostgreSQL](https://www.postgresql.org/) ou outro banco relacional
-- [JWT](https://jwt.io/) para autenticação
-- [Swagger](https://swagger.io/) para documentação
+- [Prisma](https://www.prisma.io/) or TypeORM
+- [PostgreSQL](https://www.postgresql.org/) or another relational database
+- [JWT](https://jwt.io/) for authentication
+- [Swagger](https://swagger.io/) for documentation
 
-## 📦 Instalação
+## 📦 Installation
 
-### Clone o repositório
+### Clone the repository
 
 ```
 git clone https://github.com/guilhermeramos31/desafio-backend-fusion-01.git
+```
+
+### Install the dependencies
+```
+yarn install
+```
+
+### Configure the .env file
+```
+cp .env.example .env
 ```
