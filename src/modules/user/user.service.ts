@@ -3,73 +3,70 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { PrismaService } from '../../shared/prisma/prisma.service';
+import { PrismaService } from '@shared/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
-import { UpdatePasswordDto } from './dto/update-password.dto';
-import password from '../../config/password';
+import {
+  CreateUserInputDto,
+  ResponseUserOutputDto,
+  UpdatePasswordInputDto,
+  UpdateUserInputDto,
+} from '@user/dto';
+import { FindUserInputDto } from '@user/dto/input/find-user.input.dto';
+import passwordHash from '@config/passwordHash';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(user: CreateUserDto) {
-    const { name, email } = user;
+  async create(userDTO: CreateUserInputDto): Promise<ResponseUserOutputDto> {
+    const { name, email } = userDTO;
 
-    const userExist = await this.findByEmail(email);
+    const userExist = await this.findByEmail({ email });
     if (userExist) {
       throw new ConflictException('Usuário já existe!');
     }
 
-    const passwordHashed = bcrypt.hashSync(user.password, password.salt);
-    const newUser = await this.prisma.user.create({
-      data: { name, email, password: passwordHashed },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        createdAt: true,
-        updatedAt: true,
+    const password = bcrypt.hashSync(userDTO.password, passwordHash.salt);
+    const user = await this.prisma.user.create({
+      data: { name, email, password },
+      omit: {
+        password: true,
+        lastPassword: true,
       },
     });
 
-    return { message: 'Usuário criado com sucesso!', user: newUser };
+    return {
+      message: 'Usuário criado com sucesso!',
+      user,
+    };
   }
 
-  async findByEmail(email: string) {
+  async findByEmail({ email }: FindUserInputDto) {
     return this.prisma.user.findFirst({
       where: {
         email,
       },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        createdAt: true,
-        updatedAt: true,
+      omit: {
+        password: true,
+        lastPassword: true,
       },
     });
   }
 
   private async findById(id: string) {
-    return this.prisma.user.findFirst({
+    const user = await this.prisma.user.findFirst({
       where: {
         id,
       },
     });
-  }
-
-  private async userExists(id: string) {
-    const userExist = await this.findById(id);
-    if (!userExist) {
+    if (!user) {
       throw new NotFoundException('Usuário não existe!');
     }
-    return userExist;
+    return user;
   }
 
-  async updateUser(id: string, updateUserDto: UpdateUserDto) {
-    await this.userExists(id);
+  async updateUser(id: string, updateUserDto: UpdateUserInputDto) {
+    await this.findById(id);
 
     const userUpdated = await this.prisma.user.update({
       where: {
@@ -78,12 +75,9 @@ export class UserService {
       data: {
         ...updateUserDto,
       },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        createdAt: true,
-        updatedAt: true,
+      omit: {
+        password: true,
+        lastPassword: true,
       },
     });
 
@@ -99,12 +93,12 @@ export class UserService {
     }
   }
 
-  async updatePassword(id: string, body: UpdatePasswordDto) {
-    const user = await this.userExists(id);
+  async updatePassword(id: string, body: UpdatePasswordInputDto) {
+    const user = await this.findById(id);
 
     await this.passwordAlreadyUsed(body.password, user.lastPassword);
 
-    const passwordHashed = bcrypt.hashSync(body.password, password.salt);
+    const passwordHashed = bcrypt.hashSync(body.password, passwordHash.salt);
     const userUpdated = await this.prisma.user.update({
       where: {
         id,
@@ -115,12 +109,9 @@ export class UserService {
           set: [user.password, ...user.lastPassword.slice(0, 4)],
         },
       },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        createdAt: true,
-        updatedAt: true,
+      omit: {
+        password: true,
+        lastPassword: true,
       },
     });
 
@@ -128,7 +119,7 @@ export class UserService {
   }
 
   async remove(id: string) {
-    await this.userExists(id);
+    await this.findById(id);
 
     await this.prisma.user.delete({ where: { id } });
 

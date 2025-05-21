@@ -16,6 +16,19 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "typeRoots": ["node_modules/@types", "src/types"],
+    "paths": {
+      "@modules/*": ["src/modules/*"],
+      "@modules": ["src/modules"],
+      "@prisma/*": ["prisma/*"],
+      "@prisma": ["prisma"],
+      "@config/*": ["src/config/*"],
+      "@config": ["src/config"],
+      "@shared/*": ["src/shared/*"],
+      "@shared": ["src/shared"],
+      "@user/*": ["src/modules/user/*"],
+      "@user": ["src/modules/user"]
+    }
   }
 }
