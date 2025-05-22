@@ -14,8 +14,13 @@ import {
   UpdateUserInputDto,
 } from '@user/dto';
 import { ApiTags } from '@nestjs/swagger';
-import { ApiCreateUser } from '@user/docs/decorators/create-user.decorator';
-import { FindUserInputDto } from '@user/dto/input/find-user.input.dto';
+import {
+  ApiCreateUser,
+  ApiFindUser,
+  ApiUpdatePassword,
+  ApiUpdateUser,
+} from '@user/docs';
+import { ApiDeleteUser } from '@user/docs/decorators/delete-user.decorator';
 
 @ApiTags('User')
 @Controller('user')
@@ -28,16 +33,19 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
+  @ApiFindUser()
   @Get(':email')
-  async find(@Param('email') email: FindUserInputDto) {
-    return this.userService.findByEmail(email);
+  async find(@Param('email') email: string) {
+    return this.userService.findByEmail({ email });
   }
 
+  @ApiUpdateUser()
   @Patch(':id')
   async update(@Param('id') id: string, @Body() body: UpdateUserInputDto) {
     return this.userService.updateUser(id, body);
   }
 
+  @ApiUpdatePassword()
   @Patch('password/:id')
   async updatePassword(
     @Param('id') id: string,
@@ -46,6 +54,7 @@ export class UserController {
     return this.userService.updatePassword(id, body);
   }
 
+  @ApiDeleteUser()
   @Delete(':id')
   async delete(@Param('id') id: string) {
     return this.userService.remove(id);

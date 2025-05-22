@@ -7,21 +7,32 @@ import { PrismaService } from '@shared/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import {
   CreateUserInputDto,
-  ResponseUserOutputDto,
   UpdatePasswordInputDto,
   UpdateUserInputDto,
+  FindUserInputDto,
 } from '@user/dto';
-import { FindUserInputDto } from '@user/dto/input/find-user.input.dto';
 import passwordHash from '@config/passwordHash';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(userDTO: CreateUserInputDto): Promise<ResponseUserOutputDto> {
+  private async findOne(email: string) {
+    return this.prisma.user.findFirst({
+      where: {
+        email: email,
+      },
+      omit: {
+        password: true,
+        lastPassword: true,
+      },
+    });
+  }
+
+  async create(userDTO: CreateUserInputDto) {
     const { name, email } = userDTO;
 
-    const userExist = await this.findByEmail({ email });
+    const userExist = await this.findOne(email);
     if (userExist) {
       throw new ConflictException('Usuário já existe!');
     }
@@ -42,15 +53,11 @@ export class UserService {
   }
 
   async findByEmail({ email }: FindUserInputDto) {
-    return this.prisma.user.findFirst({
-      where: {
-        email,
-      },
-      omit: {
-        password: true,
-        lastPassword: true,
-      },
-    });
+    const user = await this.findOne(email);
+    if (!user) {
+      throw new NotFoundException('Usuário não existe!');
+    }
+    return user;
   }
 
   private async findById(id: string) {
