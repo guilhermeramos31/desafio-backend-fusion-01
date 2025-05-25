@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import {
@@ -13,17 +14,20 @@ import {
   UpdatePasswordInputDto,
   UpdateUserInputDto,
 } from '@user/dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import {
   ApiCreateUser,
   ApiFindUser,
   ApiUpdatePassword,
   ApiUpdateUser,
-} from '@user/docs';
-import { ApiDeleteUser } from '@user/docs/decorators/delete-user.decorator';
+} from '@shared/decorators';
+import { ApiDeleteUser } from '@shared/decorators/docs/delete-user.decorator';
+import { JwtAuthGuard } from '@auth/guard/jwt-auth.guard';
 
 @ApiTags('User')
+@UseGuards(JwtAuthGuard)
 @Controller('user')
+@ApiBearerAuth('Authorization')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -55,6 +59,7 @@ export class UserController {
   }
 
   @ApiDeleteUser()
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async delete(@Param('id') id: string) {
     return this.userService.remove(id);

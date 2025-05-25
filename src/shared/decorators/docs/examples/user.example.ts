@@ -1,4 +1,4 @@
-export const UserExamples = (message?: string) => {
+export const UserExample = (message?: string) => {
   return {
     message,
     user: {

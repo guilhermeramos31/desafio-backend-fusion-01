@@ -28,7 +28,9 @@
       "@shared/*": ["src/shared/*"],
       "@shared": ["src/shared"],
       "@user/*": ["src/modules/user/*"],
-      "@user": ["src/modules/user"]
+      "@user": ["src/modules/user"],
+      "@auth/*": ["src/modules/auth/*"],
+      "@auth": ["src/modules/auth"]
     }
   }
 }

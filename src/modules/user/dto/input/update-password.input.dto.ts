@@ -6,7 +6,7 @@ import { CreateUserInputDto } from '@user/dto';
 export class UpdatePasswordInputDto extends PartialType(CreateUserInputDto) {
   @IsString()
   @ApiProperty({
-    example: 'SecurePass123',
+    example: 'SecurePass123!',
   })
   password: string;
 }

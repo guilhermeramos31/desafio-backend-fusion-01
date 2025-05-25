@@ -7,9 +7,9 @@ import { PrismaService } from '@shared/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import {
   CreateUserInputDto,
+  FindUserInputDto,
   UpdatePasswordInputDto,
   UpdateUserInputDto,
-  FindUserInputDto,
 } from '@user/dto';
 import passwordHash from '@config/passwordHash';
 
@@ -17,15 +17,19 @@ import passwordHash from '@config/passwordHash';
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  private async findOne(email: string) {
+  async findOne(email: string, omitPassword?: boolean) {
+    let omit = {};
+    if (omitPassword) {
+      omit = {
+        password: true,
+        lastPassword: true,
+      };
+    }
     return this.prisma.user.findFirst({
       where: {
         email: email,
       },
-      omit: {
-        password: true,
-        lastPassword: true,
-      },
+      omit,
     });
   }
 
@@ -34,7 +38,9 @@ export class UserService {
 
     const userExist = await this.findOne(email);
     if (userExist) {
-      throw new ConflictException('Usuário já existe!');
+      throw new ConflictException(
+        'Já existe um usuário com este e-mail cadastrado',
+      );
     }
 
     const password = bcrypt.hashSync(userDTO.password, passwordHash.salt);
@@ -47,7 +53,7 @@ export class UserService {
     });
 
     return {
-      message: 'Usuário criado com sucesso!',
+      message: 'Usuário criado com sucesso',
       user,
     };
   }
@@ -55,19 +61,19 @@ export class UserService {
   async findByEmail({ email }: FindUserInputDto) {
     const user = await this.findOne(email);
     if (!user) {
-      throw new NotFoundException('Usuário não existe!');
+      throw new NotFoundException('Usuário não existe');
     }
-    return user;
+    return { message: 'Usuário encontrado com sucesso', user };
   }
 
-  private async findById(id: string) {
+  async findById(id: string) {
     const user = await this.prisma.user.findFirst({
       where: {
         id,
       },
     });
     if (!user) {
-      throw new NotFoundException('Usuário não existe!');
+      throw new NotFoundException('Usuário não existe');
     }
     return user;
   }
@@ -88,14 +94,14 @@ export class UserService {
       },
     });
 
-    return { message: 'Usuário atualizado com sucesso!', user: userUpdated };
+    return { message: 'Usuário atualizado com sucesso', user: userUpdated };
   }
 
   private async passwordAlreadyUsed(newPassword: string, passwords: string[]) {
     for (const oldPassword of passwords) {
       const isSame = await bcrypt.compare(newPassword, oldPassword);
       if (isSame) {
-        throw new ConflictException('Essa senha já foi usada anteriormente.');
+        throw new ConflictException('Essa senha já foi usada anteriormente');
       }
     }
   }
@@ -122,7 +128,7 @@ export class UserService {
       },
     });
 
-    return { message: 'Senha atualizada com sucesso!', user: userUpdated };
+    return { message: 'Senha atualizada com sucesso', user: userUpdated };
   }
 
   async remove(id: string) {
@@ -130,6 +136,6 @@ export class UserService {
 
     await this.prisma.user.delete({ where: { id } });
 
-    return { message: 'Usuário deletado com sucesso!' };
+    return { message: 'Usuário deletado com sucesso' };
   }
 }
