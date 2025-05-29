@@ -3,7 +3,9 @@ import { AuthService } from './auth.service';
 import { LoginAuthDTO } from '@auth/dto';
 import { CreateUserInputDto } from '@user/dto';
 import { ApiLoginAuth, ApiRegisterAuth } from '@shared/decorators';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
