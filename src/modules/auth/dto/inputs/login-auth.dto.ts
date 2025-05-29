@@ -26,7 +26,7 @@ export class LoginAuthDTO implements ILoginAuthDTO {
     description: 'User password (min 12 chars)',
   })
   @IsString()
-  @MaxLength(24, { message: 'Password must be at least 24 characters' })
+  @MinLength(12, { message: 'Password must be at least 12 characters' })
   @IsStrongPassword(
     {
       minLength: 12,
