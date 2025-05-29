@@ -28,7 +28,7 @@ export const ApiUpdateUser = () => {
     }),
     ApiOkResponse({
       description: 'Successfully updated user',
-      example: UserExample('User updated'),
+      example: UserExample('Usuário atualizado'),
     }),
     ApiNotFoundResponse({
       description: 'User does not exist',

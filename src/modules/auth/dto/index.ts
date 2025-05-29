@@ -1,1 +1,1 @@
-export * from '@auth/dto/input/login-auth.dto';
+export * from '@auth/dto/inputs/login-auth.dto';
