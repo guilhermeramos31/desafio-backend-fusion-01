@@ -29,7 +29,7 @@ export class AuthService {
     }
 
     const passwordVerify = await bcrypt.compare(password, user.password);
-    if (!passwordVerify || !email) {
+    if (!passwordVerify) {
       throw new UnauthorizedException(messageError);
     }
 
