@@ -61,7 +61,7 @@
     "prisma": "^6.8.2",
     "source-map-support": "^0.5.21",
     "supertest": "^7.0.0",
-    "ts-jest": "^29.2.5",
+    "ts-jest": "^29.3.4",
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
@@ -70,20 +70,31 @@
     "webpack": "^5.99.9"
   },
   "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "roots": ["<rootDir>/src", "<rootDir>/test"],
     "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
+      "^.+\\.tsx?$": "ts-jest"
     },
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
-    ],
+    "moduleNameMapper": {
+      "^@auth/(.*)$": "<rootDir>/src/modules/auth/$1",
+      "^@user/(.*)$": "<rootDir>/src/modules/user/$1",
+      "^@shared/(.*)$": "<rootDir>/src/shared/$1",
+      "^@config/(.*)$": "<rootDir>/src/config/$1",
+      "^@test/(.*)$": "<rootDir>/test/$1"
+    },
+    "moduleFileExtensions": ["js", "json", "ts"],
+    "testRegex": ".*\\.spec\\.ts$",
+    "collectCoverageFrom": ["**/*.(t|j)s"],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/test/",
+      "/dist/",
+      ".module.ts",
+      ".entity.ts",
+      ".dto.ts",
+      ".interface.ts"
+    ]
   }
 }
