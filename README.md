@@ -71,7 +71,7 @@ prisma/
 │   └── migration_lock.toml   # Migration lock file
 └── schema.prisma           # Prisma schema definition
 
-[src/](/src)
+src/
 ├── @types/                 # TypeScript type declarations
 │   ├── express.d.ts        # Express type extensions
 │   └── index.ts            # Type exports
@@ -135,9 +135,9 @@ test/                       # Test suites
 ├── prisma/                 # Database tests
 │   └── prisma.service.spec.ts  # Prisma service tests
 │
-├── user/                   # User module tests
-│   ├── user.controller.spec.ts  # Controller tests
-│   └── user.service.spec.ts     # Service tests
+└── user/                   # User module tests
+    ├── user.controller.spec.ts  # Controller tests
+    └── user.service.spec.ts     # Service tests
 ```
 # Endpoints
 

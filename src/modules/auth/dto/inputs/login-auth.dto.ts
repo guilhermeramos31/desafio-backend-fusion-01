@@ -3,7 +3,7 @@ import {
   IsNotEmpty,
   IsString,
   IsStrongPassword,
-  MaxLength,
+  MinLength,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
