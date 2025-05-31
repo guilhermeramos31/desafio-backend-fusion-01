@@ -99,10 +99,7 @@ export class StarSystemService {
   }
 
   async remove(id: string) {
-    const exist = await this.findOne(id);
-    if (!exist) {
-      throw new NotFoundException('Sistema solar não encontrado');
-    }
+    await this.findOne(id);
 
     await this.prisma.starSystems.delete({
       where: {
