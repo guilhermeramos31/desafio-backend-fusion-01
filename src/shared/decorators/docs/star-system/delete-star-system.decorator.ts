@@ -19,7 +19,7 @@ export const ApiDeleteStarSystem = () => {
       },
     }),
     ApiNotFoundResponse({
-      description: 'Star system account not found',
+      description: 'Star system not found',
       example: ErrorExample({
         error: 'Not Found',
         statusCode: 404,
