@@ -14,7 +14,7 @@ export const ApiFindStarSystem = () => {
       description: 'Retrieve star system details from the system',
     }),
     ApiOkResponse({
-      description: 'Star system successfully',
+      description: 'Star system retrieved successfully',
       example: StarSystemExample('Sistema solar encontrado com sucesso'),
     }),
     ApiNotFoundResponse({
