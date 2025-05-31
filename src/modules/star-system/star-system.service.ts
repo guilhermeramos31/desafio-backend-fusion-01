@@ -80,10 +80,6 @@ export class StarSystemService {
 
   async update(id: string, { name, description }: UpdateStarSystemDto) {
     let { starSystem } = await this.findOne(id);
-    if (!starSystem) {
-      throw new NotFoundException('Sistema solar não encontrado');
-    }
-
     const exist = await this.searchByName(name);
     if (exist && starSystem.id !== exist.id) {
       throw new ConflictException('Esse sistema já existe');
