@@ -21,7 +21,7 @@ import {
   ApiUpdatePassword,
   ApiUpdateUser,
 } from '@shared/decorators';
-import { ApiDeleteUser } from '@shared/decorators/docs/delete-user.decorator';
+import { ApiDeleteUser } from '@shared/decorators/docs/user/delete-user.decorator';
 import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
 
 @ApiTags('User')
