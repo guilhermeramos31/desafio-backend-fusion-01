@@ -358,7 +358,13 @@ test/                                                      # Unit and integratio
       "name": "Sistema Solar",
       "description": "Nosso sistema"
     }
-  ]
+  ],
+  "meta": {
+    "totalItems": 13,
+    "currentPage": 1,
+    "itemsPerPage": 10,
+    "totalPages": 2
+  }
 }
 ```
 
