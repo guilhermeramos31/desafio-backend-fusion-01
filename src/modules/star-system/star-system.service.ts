@@ -86,7 +86,7 @@ export class StarSystemService {
 
     const exist = await this.searchByName(name);
     if (exist && starSystem.id !== exist.id) {
-      throw new ConflictException('Esse sistema existe');
+      throw new ConflictException('Esse sistema já existe');
     }
 
     starSystem = await this.prisma.starSystems.update({
