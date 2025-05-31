@@ -31,7 +31,7 @@ export const ApiFindAllStarSystem = () => {
       example: 'asc',
     }),
     ApiOkResponse({
-      description: 'Lista de sistemas estelares retornada com sucesso',
+      description: 'List of star systems returned successfully',
       example: {
         data: [
           {
