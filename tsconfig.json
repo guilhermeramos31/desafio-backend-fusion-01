@@ -33,7 +33,9 @@
       "@auth/*": ["modules/auth/*"],
       "@auth": ["modules/auth"],
       "@test/*": ["test/*"],
-      "@test": ["test"]
+      "@test": ["test"],
+      "@star-system/*": ["modules/star-system/*"],
+      "@star-system": ["modules/star-system"]
     },
   }
 }

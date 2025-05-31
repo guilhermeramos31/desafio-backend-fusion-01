@@ -28,6 +28,7 @@ async function bootstrap() {
     )
     .addTag('Auth')
     .addTag('User')
+    .addTag('Star Systems')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
