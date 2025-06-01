@@ -1,3 +1,3 @@
-import { Pagination } from '@shared/interceptors';
+import { Pagination } from '@shared/dtos';
 
 export class StarSystemPagination extends Pagination {}
