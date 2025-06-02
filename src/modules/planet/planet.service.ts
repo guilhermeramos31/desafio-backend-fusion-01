@@ -8,6 +8,10 @@ import { UpdatePlanetInputDto } from '@modules/planet/dto/inputs/update-planet.i
 import { PrismaService } from '@prisma/prisma.service';
 import { StarSystemService } from '@star-system/star-system.service';
 import { PlanetPagination } from '@planet/dto/inputs/pagination-planet.input.dto';
+import { DeleteOutput, Output } from '@shared/dtos';
+import { Planet } from '@planet/entity/planet.entity';
+import { PlanetPaginationOutput } from '@planet/dto';
+import { transformPrismaPlanet } from '@shared/utils/transform-planet';
 
 @Injectable()
 export class PlanetService {
@@ -16,21 +20,23 @@ export class PlanetService {
     private readonly starSystemService: StarSystemService,
   ) {}
 
-  async searchByName(name: string) {
-    return this.prisma.planet.findFirst({
-      where: {
-        name,
-      },
-      include: {
-        StarSystems: true,
-      },
-      omit: {
-        starSystemId: true,
-      },
-    });
+  private async searchByName(name: string) {
+    return {
+      data: await this.prisma.planet.findFirst({
+        where: {
+          name,
+        },
+        include: {
+          StarSystems: true,
+        },
+        omit: {
+          starSystemId: true,
+        },
+      }),
+    };
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<Output<Planet>> {
     const planet = await this.prisma.planet.findFirst({
       where: {
         id,
@@ -48,7 +54,7 @@ export class PlanetService {
 
     return {
       message: 'Planeta encontrado',
-      planet: {
+      data: {
         ...planet,
         population: planet.population.toString(),
       },
@@ -61,15 +67,15 @@ export class PlanetService {
     climate,
     population = 0n,
     starSystemId,
-  }: CreatePlanetInputDto) {
-    let planet = await this.searchByName(name);
-    if (planet) {
+  }: CreatePlanetInputDto): Promise<Output<Planet>> {
+    const planet = await this.searchByName(name);
+    if (planet.data) {
       throw new ConflictException('Planeta já existe');
     }
 
     await this.starSystemService.findOne(starSystemId);
 
-    planet = await this.prisma.planet.create({
+    planet.data = await this.prisma.planet.create({
       data: {
         name,
         terrain,
@@ -87,11 +93,19 @@ export class PlanetService {
 
     return {
       message: 'Planeta criado com sucesso',
-      planet: { ...planet, population: population.toString() },
+      data: {
+        ...planet.data,
+        population: planet.data.population.toString(),
+        StarSystems: planet.data.StarSystems ?? undefined,
+      },
     };
   }
 
-  async findAll({ page = 1, limit = 10, orderBy = 'asc' }: PlanetPagination) {
+  async findAll({
+    page = 1,
+    limit = 10,
+    orderBy = 'asc',
+  }: PlanetPagination): Promise<PlanetPaginationOutput> {
     const planetList = await this.prisma.planet.findMany({
       skip: (page - 1) * limit,
       take: limit,
@@ -104,16 +118,11 @@ export class PlanetService {
       },
     });
 
-    const planetListSerialized = planetList.map((item) => ({
-      ...item,
-      population: item.population.toString(),
-    }));
-
     const totalItems = await this.prisma.planet.count();
     const totalPages = Math.ceil(totalItems / limit);
 
     return {
-      data: planetListSerialized,
+      data: planetList.map(transformPrismaPlanet),
       pagination: {
         totalItems,
         currentPage: page,
@@ -124,7 +133,10 @@ export class PlanetService {
     };
   }
 
-  async update(id: string, { climate, terrain }: UpdatePlanetInputDto) {
+  async update(
+    id: string,
+    { climate, terrain }: UpdatePlanetInputDto,
+  ): Promise<Output<Planet>> {
     await this.findOne(id);
 
     const planet = await this.prisma.planet.update({
@@ -142,14 +154,14 @@ export class PlanetService {
 
     return {
       message: 'Planeta atualizado com sucesso',
-      planet: {
+      data: {
         ...planet,
         population: planet.population.toString(),
       },
     };
   }
 
-  async remove(id: string) {
+  async remove(id: string): Promise<DeleteOutput> {
     await this.findOne(id);
 
     await this.prisma.planet.delete({

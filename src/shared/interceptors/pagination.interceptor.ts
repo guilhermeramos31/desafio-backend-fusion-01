@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Response } from 'express';
 
-interface PaginatedResponse<T> {
+export interface PaginatedResponse<T> {
   data: T;
   pagination?: {
     totalItems: number;
