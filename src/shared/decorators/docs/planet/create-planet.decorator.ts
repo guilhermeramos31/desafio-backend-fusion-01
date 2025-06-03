@@ -21,7 +21,13 @@ export const ApiCreatePlanet = () => {
       examples: {
         valid: {
           summary: 'Valid registration example',
-          value: CreatePlanetInputDto,
+          value: {
+            name: 'Terra',
+            climate: Climate.TEMPERATE,
+            terrain: Terrain.GRASSLANDS,
+            population: 0n,
+            starSystemId: 'daoisjheduiqwey1723141sdasd',
+          },
         },
         invalid: {
           summary: 'Invalid registration example',
