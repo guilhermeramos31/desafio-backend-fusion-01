@@ -50,6 +50,13 @@ export const ApiFindAllStarSystem = () => {
             description: 'Possui planeta semelhante à Terra',
           },
         ],
+        meta: {
+          totalItems: 2,
+          currentPage: 1,
+          itemsPerPage: 10,
+          totalPages: 1,
+          orderBy: 'asc',
+        },
       },
     }),
   );

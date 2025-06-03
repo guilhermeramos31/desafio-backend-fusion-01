@@ -35,7 +35,9 @@
       "@test/*": ["test/*"],
       "@test": ["test"],
       "@star-system/*": ["modules/star-system/*"],
-      "@star-system": ["modules/star-system"]
+      "@star-system": ["modules/star-system"],
+      "@planet/*": ["modules/planet/*"],
+      "@planet": ["modules/planet"]
     },
   }
 }

@@ -8,9 +8,9 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Response } from 'express';
 
-interface PaginatedResponse<T> {
+export interface PaginatedResponse<T> {
   data: T;
-  pagination?: {
+  meta?: {
     totalItems: number;
     currentPage: number;
     itemsPerPage: number;
@@ -25,31 +25,29 @@ interface DataResponse<T> {
 
 @Injectable()
 export class PaginationInterceptor<T>
-  implements NestInterceptor<DataResponse<T>>
+  implements NestInterceptor<DataResponse<T>, PaginatedResponse<T>>
 {
   intercept(
     context: ExecutionContext,
     next: CallHandler<PaginatedResponse<T>>,
-  ): Observable<DataResponse<T>> {
+  ): Observable<PaginatedResponse<T>> {
     const httpContext = context.switchToHttp();
     const response = httpContext.getResponse<Response>();
 
     return next.handle().pipe(
       map((paginatedData) => {
-        if (paginatedData?.pagination) {
-          const { pagination } = paginatedData;
+        if (paginatedData?.meta) {
+          const { meta } = paginatedData;
           response.set({
-            'X-Total-Items': pagination.totalItems.toString(),
-            'X-Current-Page': pagination.currentPage.toString(),
-            'X-Items-Per-Page': pagination.itemsPerPage.toString(),
-            'X-Total-Pages': pagination.totalPages.toString(),
-            'X-Order-By': pagination.orderBy?.toString() || 'asc',
+            'X-Total-Items': meta.totalItems.toString(),
+            'X-Current-Page': meta.currentPage.toString(),
+            'X-Items-Per-Page': meta.itemsPerPage.toString(),
+            'X-Total-Pages': meta.totalPages.toString(),
+            'X-Order-By': meta.orderBy?.toString() || 'asc',
           });
         }
 
-        return {
-          data: paginatedData.data,
-        };
+        return paginatedData;
       }),
     );
   }
