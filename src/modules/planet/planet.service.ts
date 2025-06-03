@@ -177,4 +177,34 @@ export class PlanetService {
       message: 'Planeta deletado com sucesso',
     };
   }
+
+  async addPopulation(id: string): Promise<bigint> {
+    const planet = await this.findOne(id);
+    const population = BigInt(planet.data.population) + BigInt(1);
+    planet.data = await this.prisma.planet.update({
+      where: {
+        id,
+      },
+      data: {
+        population,
+      },
+    });
+
+    return population;
+  }
+
+  async removePopulation(id: string): Promise<bigint> {
+    const planet = await this.findOne(id);
+    const population = BigInt(planet.data.population) - BigInt(1);
+    planet.data = await this.prisma.planet.update({
+      where: {
+        id,
+      },
+      data: {
+        population,
+      },
+    });
+
+    return population;
+  }
 }

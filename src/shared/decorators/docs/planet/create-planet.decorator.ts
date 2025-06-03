@@ -26,7 +26,7 @@ export const ApiCreatePlanet = () => {
             name: 'Terra',
             climate: Climate.TEMPERATE,
             terrain: Terrain.GRASSLANDS,
-            population: 0n,
+            population: 0,
             starSystemId: 'daoisjheduiqwey1723141sdasd',
           },
         },
