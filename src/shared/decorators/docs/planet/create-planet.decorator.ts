@@ -59,7 +59,7 @@ export const ApiCreatePlanet = () => {
     ApiBadRequestResponse({
       description: 'Invalid request data',
       example: ErrorExample({
-        error: 'BadRequest',
+        error: 'Bad Request',
         statusCode: 400,
         message: [
           'name should not be empty',

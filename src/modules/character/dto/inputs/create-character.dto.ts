@@ -9,13 +9,19 @@ export class CreateCharacterDto {
   name: string;
 
   @IsNotEmpty()
-  @ApiProperty()
   @IsEnum(Specie)
+  @ApiProperty({
+    enum: Specie,
+    example: Specie.YODA_SPECIES,
+  })
   specie: Specie;
 
   @IsNotEmpty()
-  @ApiProperty()
   @IsEnum(Affiliation)
+  @ApiProperty({
+    enum: Affiliation,
+    example: Affiliation.MANDALORIANS,
+  })
   affiliation: Affiliation;
 
   @IsString()
