@@ -144,7 +144,7 @@ export class CharacterService {
       },
     });
     return {
-      message: '',
+      message: 'Personagem atualizado com sucesso',
       data: transformPrismaCharacter(character),
     };
   }
