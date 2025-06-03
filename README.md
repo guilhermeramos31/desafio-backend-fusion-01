@@ -95,6 +95,21 @@ src/
 │   │   ├── auth.module.ts                                 # Declares and provides all auth-related services, strategies, and controllers
 │   │   └── auth.service.ts                                # Business logic for login, token generation, and validation
 │   │
+│   ├── planet/
+│   │   ├── dto/
+│   │   │   ├── inputs/
+│   │   │   │   ├── create-planet.input.dto.ts             # Input DTO for planet creation
+│   │   │   │   ├── pagination-planet.input.dto.ts         # Input DTO for pagination parameters
+│   │   │   │   └── update-planet.input.dto.ts             # Input DTO for planet updates
+│   │   │   ├── outputs/
+│   │   │   │   └── pagination-planet.output.dto.ts        # Output DTO for paginated responses
+│   │   │   └── index.ts                                   # File for DTO exports
+│   │   ├── entity/
+│   │   │   └── planet.entity.ts/                          # Planet entity definition
+│   │   ├── planet.controller.ts                           # API route handlers
+│   │   ├── planet.module.ts                               # Module configuration
+│   │   └── planet.service.ts                              # Business logic/service layer
+│   │
 │   ├── star-system/                                       # Star System module – domain logic for managing star system entities
 │   │   ├── dto/                                           # DTOs for star system input validation and response formatting
 │   │   │   ├── inputs/                                    # Input DTOs – schemas for creating and updating star systems
@@ -129,23 +144,38 @@ src/
 │   │   │   │   │   ├── login-auth.decorator.ts            # Swagger decorator for login route documentation
 │   │   │   │   │   ├── register-auth.decorator.ts         # Swagger decorator for register route documentation
 │   │   │   │   │   └── update-password.decorator.ts       # Swagger decorator for update password documentation
+│   │   │   │   │
 │   │   │   │   ├── examples/                              # Predefined request/response examples for Swagger UI
 │   │   │   │   │   ├── auth.example.ts                    # Example payloads and responses for auth endpoints
 │   │   │   │   │   ├── error.example.ts                   # Standardized error response examples
 │   │   │   │   │   ├── star-system.example.ts             # Example payloads and responses for star system endpoints
 │   │   │   │   │   └── user.example.ts                    # Example user data responses
+│   │   │   │   │
+│   │   │   │   ├── planet/
+│   │   │   │   │   ├── create-planet.decorator.ts         # Swagger decorator for creating a planet
+│   │   │   │   │   ├── delete-planet.decorator.ts         # Swagger decorator for deleting a planet
+│   │   │   │   │   ├── find-all-planet.decorator.ts       # Swagger decorator for listing all planet
+│   │   │   │   │   ├── find-planet.decorator.ts           # Swagger decorator for finding a specific planet
+│   │   │   │   │   └── update-planet.decorator.ts         # Swagger decorator for updating a planet
+│   │   │   │   │
 │   │   │   │   ├── star-system/
 │   │   │   │   │   ├── create-star-system.decorator.ts    # Swagger decorator for creating a star system
 │   │   │   │   │   ├── delete-star-system.decorator.ts    # Swagger decorator for deleting a star system
 │   │   │   │   │   ├── find-all-star-system.decorator.ts  # Swagger decorator for listing all star systems
 │   │   │   │   │   ├── find-star-system.decorator.ts      # Swagger decorator for finding a specific star system
 │   │   │   │   │   └── update-star-system.decorator.ts    # Swagger decorator for updating a star system
+│   │   │   │   │
 │   │   │   │   └── user/
 │   │   │   │       ├── create-user.decorator.ts           # Swagger decorator for creating a user
 │   │   │   │       ├── delete-user.decorator.ts           # Swagger decorator for deleting a user
 │   │   │   │       ├── find-user.decorator.ts             # Swagger decorator for finding a user
 │   │   │   │       └── update-user.decorator.ts           # Swagger decorator for updating a user
 │   │   │   └── index.ts                                   # Exports all custom decorators from a single access point
+│   │   │
+│   │   ├── dtos/
+│   │   │   ├── index.ts                                   # Entry point for re-exporting shared resources
+│   │   │   ├── outputs.dto.ts                             # Responses generic
+│   │   │   └── pagination.dto.ts                          # Responses list generic
 │   │   │
 │   │   ├── interceptors/                                  # NestJS interceptors for transforming or augmenting requests/responses
 │   │   │   ├── pagination.interceptor.ts                  # Automatically handles pagination (e.g., attaching metadata to paginated responses)
@@ -156,10 +186,11 @@ src/
 │   │   │   └── prisma.service.ts                          # Initializes and exposes the Prisma Client instance
 │   │   │
 │   │   ├── utils/                                         # General-purpose helper functions and interfaces
-│   │   │   └── interfaces/                                # Interface definitions used across multiple layers
-│   │   │       └── error-example.interface.ts             # Interface for standardizing example error objects
-│   │   └── index.ts                                       # Entry point for re-exporting shared resources
-│   │
+│   │   │   ├── interfaces/                                # Interface definitions used across multiple layers
+│   │   │   │   └── error-example.interface.ts             # Interface for standardizing example error objects
+│   │   │   ├── index.ts                                   # Entry point for re-exporting shared resources
+│   │   │   └── transform-planet.ts                        # Converter type planet prisma for planet entity
+│   │   │
 │   ├── app.module.ts                                      # Root application module where all feature modules are imported
 │   └── main.ts                                            # Main entry point of the application; sets up and starts the NestJS app
 │   
@@ -182,19 +213,19 @@ test/                                                      # Unit and integratio
 # Endpoints
 
 ## 🔑 Authentication Endpoints
-| Method | Endpoint            | Description                     | Parameters       | Status Codes  |
-|--------|---------------------|---------------------------------|------------------|---------------|
-| POST   | `/auth/login`       | Authenticate existing user      | -                | 200, 401      |
-| POST   | `/auth/register`    | Register new user               | -                | 201, 400, 409 |
+| Method | Endpoint                 | Description                          | Parameters                                         | Status Codes      |
+|--------|--------------------------|--------------------------------------|----------------------------------------------------|-------------------|
+| POST   | `/auth/login`            | Authenticate existing user           | -                                                  | 200, 401          |
+| POST   | `/auth/register`         | Register new user                    | -                                                  | 201, 400, 409     |
 
 ## 👤 User Endpoints
-| Method | Endpoint                  | Description                     | Parameters       | Status Codes   |
-|--------|---------------------------|---------------------------------|------------------|----------------|
-| POST   | `/user`                   | Create new user account         | -                | 201, 400, 409  |
-| GET    | `/user/{email}`           | Get user by email               | `email` (string) | 200, 404       |
-| PATCH  | `/user/{id}`              | Update user details             | `id` (UUID)      | 200, 400, 404  |
-| DELETE | `/user/{id}`              | Delete user account             | `id` (UUID)      | 200, 404       | 
-| PATCH  | `/user/password/{id}`     | Update user password            | `id` (UUID)      | 200, 400, 404  |
+| Method | Endpoint                 | Description                          | Parameters                                         | Status Codes      |
+|--------|--------------------------|--------------------------------------|----------------------------------------------------|-------------------|
+| POST   | `/user`                  | Create new user account              | -                                                  | 201, 400, 409     |
+| GET    | `/user/{email}`          | Get user by email                    | `email` (string)                                   | 200, 404          |
+| PATCH  | `/user/{id}`             | Update user details                  | `id` (UUID)                                        | 200, 400, 404     |
+| DELETE | `/user/{id}`             | Delete user account                  | `id` (UUID)                                        | 200, 404          | 
+| PATCH  | `/user/password/{id}`    | Update user password                 | `id` (UUID)                                        | 200, 400, 404     |
 
 ## 🌌 Star Systems Endpoints
 | Method | Endpoint                 | Description                          | Parameters                                         | Status Codes      |
@@ -205,6 +236,16 @@ test/                                                      # Unit and integratio
 | PUT    | `/star-systems/{id}`     | Update star system                   | `id` (UUID), Body (JSON)                           | 200, 400, 404     |
 | DELETE | `/star-systems/{id}`     | Delete star system                   | `id` (UUID)                                        | 200, 404          |
 
+## 🌍 Planet
+| Method | Endpoint                 | Description                          | Parameters                                         | Status Codes      |
+|--------|--------------------------|--------------------------------------|----------------------------------------------------|-------------------|
+| POST   | `/planets`               | Create a new planet                  | Body (JSON)                                        | 201, 400, 409     |
+| GET    | `/planets`               | Get all planets with pagination      | `page`, `limit`, `orderBy` (optional query params) | 200, 400          |
+| GET    | `/planets/{id}`          | Find planet                          | `id` (UUID)                                        | 200, 404          |
+| PATCH  | `/planets/{id}`          | Update planet                        | `id` (UUID), Body (JSON)                           | 200, 400, 404     |
+| DELETE | `/planets/{id}`          | Delete planet                        | `id` (UUID)                                        | 200, 404          |
+
+
 ### Examples Json Requests
 
 *Login*
@@ -214,6 +255,7 @@ test/                                                      # Unit and integratio
   "password": "securePassword123"
 }
 ```
+
 *Register*
 ```json
 {
@@ -222,12 +264,14 @@ test/                                                      # Unit and integratio
   "password": "SecurePass123!"
 }
 ```
+
 *Update User*
 ```json
 {
   "name": "jhon"
 }
 ```
+
 *Update Password*
 ```json
 {
@@ -248,6 +292,37 @@ test/                                                      # Unit and integratio
 {
   "name": "Sistema Solar",
   "description": "Update star system with the provided data"
+}
+```
+
+*Create Planet*
+```json
+{
+  "name": "Terra",
+  "climate": "TEMPERATE",
+  "terrain": "GRASSLANDS",
+  "population": 0,
+  "starSystemId": "daoisjheduiqwey1723141sdasd"
+}
+```
+
+*Update Climate or Terrain Planet*
+```json
+{
+  "climate": "TEMPERATE",
+  "terrain": "URBAN"
+}
+```
+
+```json
+{
+  "climate": "TEMPERATE",
+}
+```
+
+```json
+{
+  "terrain": "URBAN"
 }
 ```
 
@@ -281,6 +356,7 @@ test/                                                      # Unit and integratio
   }
 }
 ```
+
 *Find user*
 ```json
 {
@@ -294,6 +370,7 @@ test/                                                      # Unit and integratio
   }
 }
 ```
+
 *Update user*
 ```json
 {
@@ -307,12 +384,14 @@ test/                                                      # Unit and integratio
   }
 }
 ```
+
 *Delete user* 
 ```json
 {
   "message": "Usuário deletado com sucesso"
 }
 ```
+
 *Update password*
 ```json
 {
@@ -326,6 +405,7 @@ test/                                                      # Unit and integratio
   }
 }
 ```
+
 *Create Star System*
 ```json
 {
@@ -396,6 +476,109 @@ test/                                                      # Unit and integratio
 ```json
 {
   "message": "Sistema deletado com sucesso"
+}
+```
+
+*Create Planet*
+```json
+{
+  "message": "Planeta criado com sucesso",
+  "data": {
+    "id": "f395099b-1198-4805-9363-1cbafa5e20d0",
+    "name": "Marte",
+    "climate": "TEMPERATE",
+    "terrain": "GRASSLANDS",
+    "population": "0",
+    "StarSystems": {
+      "id": "5ebfe608-bc55-4f66-a2ab-7652de1456b7",
+      "name": "Sistema Solar",
+      "description": "Nosso sistema"
+    }
+  }
+}
+```
+
+*List Planet*
+```json
+{
+  "data": [
+    {
+      "id": "f395099b-1198-4805-9363-1cbafa5e20d0",
+      "name": "Marte",
+      "climate": "TEMPERATE",
+      "terrain": "GRASSLANDS",
+      "population": "0",
+      "StarSystems": {
+        "id": "5ebfe608-bc55-4f66-a2ab-7652de1456b7",
+        "name": "Sistema Solar",
+        "description": "Nosso sistema"
+      }
+    },
+    {
+      "id": "083b9d54-eecd-4b1f-ab8b-3afe1dd26fa6",
+      "name": "Plutão",
+      "climate": "TEMPERATE",
+      "terrain": "GRASSLANDS",
+      "population": "0",
+      "StarSystems": {
+        "id": "5ebfe608-bc55-4f66-a2ab-7652de1456b7",
+        "name": "Sistema Solar",
+        "description": "Nosso sistema"
+      }
+    }
+  ],
+  "meta": {
+    "totalItems": 2,
+    "currentPage": 1,
+    "itemsPerPage": 10,
+    "totalPages": 1,
+    "orderBy": "asc"
+  }
+}
+```
+
+*Find Planet*
+```json
+{
+  "message": "Planeta encontrado",
+  "data": {
+    "id": "f395099b-1198-4805-9363-1cbafa5e20d0",
+    "name": "Marte",
+    "climate": "TEMPERATE",
+    "terrain": "GRASSLANDS",
+    "population": "0",
+    "StarSystems": {
+      "id": "5ebfe608-bc55-4f66-a2ab-7652de1456b7",
+      "name": "Sistema Solar",
+      "description": "Nosso sistema"
+    }
+  }
+}
+```
+
+*Update Planet*
+```json
+{
+  "message": "Planeta atualizado com sucesso",
+  "data": {
+    "id": "f395099b-1198-4805-9363-1cbafa5e20d0",
+    "name": "Marte",
+    "climate": "TEMPERATE",
+    "terrain": "GRASSLANDS",
+    "population": "0",
+    "StarSystems": {
+      "id": "5ebfe608-bc55-4f66-a2ab-7652de1456b7",
+      "name": "Sistema Solar",
+      "description": "Nosso sistema"
+    }
+  }
+}
+```
+
+*Delete Planet*
+```json
+{
+  "message": "Planeta deletado com sucesso"
 }
 ```
 

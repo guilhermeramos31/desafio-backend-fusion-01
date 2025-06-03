@@ -6,7 +6,3 @@ export interface Output<T> {
 export interface DeleteOutput {
   message: string;
 }
-
-export interface Data<T> {
-  data: T;
-}

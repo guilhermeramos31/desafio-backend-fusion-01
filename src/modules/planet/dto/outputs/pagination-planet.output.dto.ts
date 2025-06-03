@@ -3,7 +3,7 @@ import { Planet } from '@planet/entity/planet.entity';
 
 export class PlanetPaginationOutput implements PaginatedResponse<Planet[]> {
   data: Planet[];
-  pagination?:
+  meta?:
     | {
         totalItems: number;
         currentPage: number;

@@ -106,6 +106,9 @@ export class PlanetService {
     limit = 10,
     orderBy = 'asc',
   }: PlanetPagination): Promise<PlanetPaginationOutput> {
+    page = Number(page);
+    limit = Number(limit);
+
     const planetList = await this.prisma.planet.findMany({
       skip: (page - 1) * limit,
       take: limit,
@@ -123,7 +126,7 @@ export class PlanetService {
 
     return {
       data: planetList.map(transformPrismaPlanet),
-      pagination: {
+      meta: {
         totalItems,
         currentPage: page,
         itemsPerPage: limit,

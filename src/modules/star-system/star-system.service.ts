@@ -52,7 +52,7 @@ export class StarSystemService {
 
     return {
       data: starSystemList,
-      pagination: {
+      meta: {
         totalItems,
         currentPage: page,
         itemsPerPage: limit,
