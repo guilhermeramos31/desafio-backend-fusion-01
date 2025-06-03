@@ -8,5 +8,6 @@ import { StarSystemModule } from '@star-system/star-system.module';
   controllers: [PlanetController],
   providers: [PlanetService],
   imports: [PrismaModule, StarSystemModule],
+  exports: [PlanetService],
 })
 export class PlanetModule {}

@@ -8,6 +8,7 @@ import {
 } from '@nestjs/swagger';
 import { CreatePlanetInputDto } from '@planet/dto';
 import { ErrorExample, PlanetExample } from '@shared/decorators';
+import { Climate, Terrain } from '@prisma/client';
 
 export const ApiCreatePlanet = () => {
   return applyDecorators(
@@ -25,7 +26,7 @@ export const ApiCreatePlanet = () => {
             name: 'Terra',
             climate: Climate.TEMPERATE,
             terrain: Terrain.GRASSLANDS,
-            population: 0n,
+            population: 0,
             starSystemId: 'daoisjheduiqwey1723141sdasd',
           },
         },
@@ -58,7 +59,7 @@ export const ApiCreatePlanet = () => {
     ApiBadRequestResponse({
       description: 'Invalid request data',
       example: ErrorExample({
-        error: 'BadRequest',
+        error: 'Bad Request',
         statusCode: 400,
         message: [
           'name should not be empty',
