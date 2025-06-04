@@ -104,7 +104,7 @@ export class SpaceshipService {
     const { data } = await this.findOne(id);
     const exist = await this.searchByName(name);
     if (exist && data.id !== exist.id) {
-      throw new ConflictException('Esse nave já existe');
+      throw new ConflictException('Esta nave já existe');
     }
 
     const spaceship = await this.prisma.spaceship.update({
