@@ -14,15 +14,15 @@ export const ApiFindCharacter = () => {
       description: 'Retrieve character details from the system',
     }),
     ApiOkResponse({
-      description: 'Planet retrieved successfully',
+      description: 'Character retrieved successfully',
       example: CharacterExample('Personagem encontrado'),
     }),
     ApiNotFoundResponse({
-      description: 'Planet not found',
+      description: 'Character not found',
       example: ErrorExample({
         error: 'Not Found',
         statusCode: 404,
-        message: 'Planeta não encontrado',
+        message: 'Personagem não encontrado',
       }),
     }),
   );

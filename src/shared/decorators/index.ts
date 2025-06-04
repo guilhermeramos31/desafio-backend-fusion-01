@@ -23,3 +23,8 @@ export * from '@shared/decorators/docs/character/update-character.decorator';
 export * from '@shared/decorators/docs/character/delete-character.decorator';
 export * from '@shared/decorators/docs/character/find-all-character.decorator';
 export * from '@shared/decorators/docs/character/find-character.decorator';
+export * from '@shared/decorators/docs/spaceship/create-spaceship.decorator';
+export * from '@shared/decorators/docs/spaceship/find-all-spaceship.decorator';
+export * from '@shared/decorators/docs/spaceship/find-spaceship.decorator';
+export * from '@shared/decorators/docs/spaceship/update-spaceship.decorator';
+export * from '@shared/decorators/docs/spaceship/delete-spaceship.decorator';

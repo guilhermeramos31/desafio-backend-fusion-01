@@ -1,17 +1,18 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { CreateSpaceshipDto } from '@spaceship/dto';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString } from 'class-validator';
 
-export class UpdateSpaceshipDto extends PartialType(CreateSpaceshipDto) {
+export class UpdateSpaceshipDto {
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    example: 'ASdaw',
+  })
   name: string;
 
-  model: string;
-
-  manufacturer: string;
-
-  @IsNumber()
+  @IsString()
+  @IsNotEmpty()
   @ApiProperty({
-    example: 100,
+    example: 'N33-as',
   })
-  passengerCapacity: number;
+  model: string;
 }

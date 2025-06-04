@@ -16,6 +16,13 @@ import { StarSystemPagination } from '@star-system/dto';
 import { CreateSpaceshipDto, UpdateSpaceshipDto } from '@spaceship/dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
+import {
+  ApiCreateSpaceship,
+  ApiDeleteSpaceship,
+  ApiFindAllSpaceship,
+  ApiFindSpaceship,
+  ApiUpdateSpaceship,
+} from '@shared/decorators';
 
 @ApiTags('Spaceships')
 @UseGuards(JwtAuthGuard)
@@ -25,22 +32,26 @@ export class SpaceshipController {
   constructor(private readonly spaceshipService: SpaceshipService) {}
 
   @Post()
+  @ApiCreateSpaceship()
   create(@Body() createSpaceshipDto: CreateSpaceshipDto) {
     return this.spaceshipService.create(createSpaceshipDto);
   }
 
   @Get()
+  @ApiFindAllSpaceship()
   @UseInterceptors(PaginationInterceptor)
   findAll(@Query() query: StarSystemPagination) {
     return this.spaceshipService.findAll(query);
   }
 
   @Get(':id')
+  @ApiFindSpaceship()
   findOne(@Param('id') id: string) {
     return this.spaceshipService.findOne(id);
   }
 
   @Patch(':id')
+  @ApiUpdateSpaceship()
   update(
     @Param('id') id: string,
     @Body() updateSpaceshipDto: UpdateSpaceshipDto,
@@ -49,6 +60,7 @@ export class SpaceshipController {
   }
 
   @Delete(':id')
+  @ApiDeleteSpaceship()
   remove(@Param('id') id: string) {
     return this.spaceshipService.remove(id);
   }

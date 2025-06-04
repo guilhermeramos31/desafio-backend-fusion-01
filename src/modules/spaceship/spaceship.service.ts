@@ -99,7 +99,7 @@ export class SpaceshipService {
 
   async update(
     id: string,
-    { name, model, manufacturer, passengerCapacity }: UpdateSpaceshipDto,
+    { name, model }: UpdateSpaceshipDto,
   ): Promise<Output<Spaceship>> {
     const { data } = await this.findOne(id);
     const exist = await this.searchByName(name);
@@ -114,8 +114,6 @@ export class SpaceshipService {
       data: {
         name,
         model,
-        manufacturer,
-        passengerCapacity,
       },
     });
 
