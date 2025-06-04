@@ -18,3 +18,8 @@ export * from '@shared/decorators/docs/planet/find-all-planet.decorator';
 export * from '@shared/decorators/docs/planet/find-planet.decorator';
 export * from '@shared/decorators/docs/planet/update-planet.decorator';
 export * from '@shared/decorators/docs/planet/delete-planet';
+export * from '@shared/decorators/docs/character/create-character.decorator';
+export * from '@shared/decorators/docs/character/update-character.decorator';
+export * from '@shared/decorators/docs/character/delete-character.decorator';
+export * from '@shared/decorators/docs/character/find-all-character.decorator';
+export * from '@shared/decorators/docs/character/find-character.decorator';

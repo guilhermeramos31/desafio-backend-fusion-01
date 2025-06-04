@@ -14,13 +14,15 @@ import { CharacterService } from './character.service';
 import { CreateCharacterDto, UpdateCharacterDto } from '@character/dto';
 import { CharacterPagination } from '@character/dto/inputs/pagination-character.input.dto';
 import { PaginationInterceptor } from '@shared/interceptors';
-import { ApiCreateCharacter } from '@shared/decorators/docs/character/create-character.decorator';
-import { ApiFindAllCharacters } from '@shared/decorators/docs/character/find-all-character.decorator';
-import { ApiFindCharacter } from '@shared/decorators/docs/character/find-character.decorator';
-import { ApiUpdateCharacter } from '@shared/decorators/docs/character/update-character.decorator';
-import { ApiDeleteCharacter } from '@shared/decorators/docs/character/delete-character.decorator';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
+import {
+  ApiCreateCharacter,
+  ApiDeleteCharacter,
+  ApiFindAllCharacters,
+  ApiFindCharacter,
+  ApiUpdateCharacter,
+} from '@shared/decorators';
 
 @ApiTags('Characters')
 @Controller('characters')
