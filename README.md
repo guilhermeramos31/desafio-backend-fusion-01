@@ -95,6 +95,21 @@ src/
 │   │   ├── auth.module.ts                                 # Declares and provides all auth-related services, strategies, and controllers
 │   │   └── auth.service.ts                                # Business logic for login, token generation, and validation
 │   │
+│   ├── character/
+│   │   ├── dto/
+│   │   │   ├── inputs/
+│   │   │   │   ├── create-character.input.dto.ts          # Input DTO for character creation
+│   │   │   │   ├── pagination-character.input.dto.ts      # Input DTO for pagination parameters
+│   │   │   │   └── update-character.input.dto.ts          # Input DTO for character updates
+│   │   │   ├── outputs/
+│   │   │   │   └── pagination-character.output.dto.ts     # Output DTO for paginated responses
+│   │   │   └── index.ts                                   # File for DTO exports
+│   │   ├── entity/
+│   │   │   └── character.entity.ts                        # Character entity definition
+│   │   ├── character.controller.ts                        # API route handlers
+│   │   ├── character.module.ts                            # Module configuration
+│   │   └── character.service.ts                           # Business logic/service layer
+│   │
 │   ├── planet/
 │   │   ├── dto/
 │   │   │   ├── inputs/
@@ -245,6 +260,16 @@ test/                                                      # Unit and integratio
 | PATCH  | `/planets/{id}`          | Update planet                        | `id` (UUID), Body (JSON)                           | 200, 400, 404     |
 | DELETE | `/planets/{id}`          | Delete planet                        | `id` (UUID)                                        | 200, 404          |
 
+## 🚶 Characters
+| Method | Endpoint                 | Description                          | Parameters                                         | Status Codes      |
+|--------|--------------------------|--------------------------------------|----------------------------------------------------|-------------------|
+| POST   | `/characters`            | Create a new character               | Body (JSON)                                        | 201, 400, 409     |
+| GET    | `/characters`            | Get all characters with pagination   | `page`, `limit`, `orderBy` (optional query)        | 200, 400          |
+| GET    | `/characters/{id}`       | Find character                       | `id` (UUID)                                        | 200, 404          |
+| PUT    | `/characters/{id}`       | Update character                     | `id` (UUID), Body (JSON)                           | 200, 400, 404     |
+| DELETE | `/characters/{id}`       | Delete character                     | `id` (UUID)                                        | 200, 404          |
+
+
 
 ### Examples Json Requests
 
@@ -323,6 +348,23 @@ test/                                                      # Unit and integratio
 ```json
 {
   "terrain": "URBAN"
+}
+```
+
+*Create Characters*
+```json
+{
+  "name": "John",
+  "specie": "YODA_SPECIES",
+  "affiliation": "MANDALORIANS",
+  "homePlanetId": "f395099b-1198-4805-9363-1cbafa5e20d0"
+}
+```
+
+*Update Characters*
+```json
+{
+  "name": "John"
 }
 ```
 
@@ -579,6 +621,158 @@ test/                                                      # Unit and integratio
 ```json
 {
   "message": "Planeta deletado com sucesso"
+}
+```
+
+*Create Character*
+```json
+{
+  "message": "Personagem criado com sucesso",
+  "data": {
+    "id": "835dd03e-50ac-47f0-b8c2-edc149ee205d",
+    "name": "John",
+    "specie": "YODA_SPECIES",
+    "affiliation": "MANDALORIANS",
+    "homePlanet": {
+      "id": "f395099b-1198-4805-9363-1cbafa5e20d0",
+      "name": "Marte",
+      "climate": "TEMPERATE",
+      "terrain": "GRASSLANDS",
+      "population": "1",
+      "StarSystems": {
+        "id": "5ebfe608-bc55-4f66-a2ab-7652de1456b7",
+        "name": "Sistema Solar",
+        "description": "Nosso sistema"
+      }
+    }
+  }
+}
+```
+
+*List Character*
+```json
+{
+  "data": [
+    {
+      "id": "d2f4e6ce-e77a-4a7c-8dcc-4f4cbebc5ab8",
+      "name": "Boba Fett",
+      "specie": "HUMAN",
+      "affiliation": "BOUNTY_HUNTERS",
+      "homePlanet": {
+        "id": "f395099b-1198-4805-9363-1cbafa5e20d0",
+        "name": "Marte",
+        "climate": "TEMPERATE",
+        "terrain": "GRASSLANDS",
+        "population": "3",
+        "StarSystems": {
+          "id": "5ebfe608-bc55-4f66-a2ab-7652de1456b7",
+          "name": "Sistema Solar",
+          "description": "Nosso sistema"
+        }
+      }
+    },
+    {
+      "id": "2c3b93fa-d232-4ff9-8e08-0bdf64bf81af",
+      "name": "Din Djarin",
+      "specie": "HUMAN",
+      "affiliation": "MANDALORIANS",
+      "homePlanet": {
+        "id": "f395099b-1198-4805-9363-1cbafa5e20d0",
+        "name": "Marte",
+        "climate": "TEMPERATE",
+        "terrain": "GRASSLANDS",
+        "population": "3",
+        "StarSystems": {
+          "id": "5ebfe608-bc55-4f66-a2ab-7652de1456b7",
+          "name": "Sistema Solar",
+          "description": "Nosso sistema"
+        }
+      }
+    },
+    {
+      "id": "11b24704-369d-4841-bbd7-a568a6946786",
+      "name": "John",
+      "specie": "YODA_SPECIES",
+      "affiliation": "MANDALORIANS",
+      "homePlanet": {
+        "id": "f395099b-1198-4805-9363-1cbafa5e20d0",
+        "name": "Marte",
+        "climate": "TEMPERATE",
+        "terrain": "GRASSLANDS",
+        "population": "3",
+        "StarSystems": {
+          "id": "5ebfe608-bc55-4f66-a2ab-7652de1456b7",
+          "name": "Sistema Solar",
+          "description": "Nosso sistema"
+        }
+      }
+    }
+  ],
+  "meta": {
+    "totalItems": 3,
+    "currentPage": 1,
+    "itemsPerPage": 10,
+    "totalPages": 1,
+    "orderBy": "asc"
+  }
+}
+```
+
+*Find Character*
+```json
+{
+  "message": "Personagem encontrado",
+  "data": {
+    "id": "835dd03e-50ac-47f0-b8c2-edc149ee205d",
+    "name": "John",
+    "specie": "YODA_SPECIES",
+    "affiliation": "MANDALORIANS",
+    "homePlanet": {
+      "id": "f395099b-1198-4805-9363-1cbafa5e20d0",
+      "name": "Marte",
+      "climate": "TEMPERATE",
+      "terrain": "GRASSLANDS",
+      "population": "1",
+      "StarSystems": {
+        "id": "5ebfe608-bc55-4f66-a2ab-7652de1456b7",
+        "name": "Sistema Solar",
+        "description": "Nosso sistema"
+      }
+    }
+  }
+}
+```
+
+
+*Update Character*
+```json
+{
+  "message": "Personagem atualizado com sucesso",
+  "data": {
+    "id": "835dd03e-50ac-47f0-b8c2-edc149ee205d",
+    "name": "John",
+    "specie": "YODA_SPECIES",
+    "affiliation": "MANDALORIANS",
+    "homePlanet": {
+      "id": "f395099b-1198-4805-9363-1cbafa5e20d0",
+      "name": "Marte",
+      "climate": "TEMPERATE",
+      "terrain": "GRASSLANDS",
+      "population": "1",
+      "StarSystems": {
+        "id": "5ebfe608-bc55-4f66-a2ab-7652de1456b7",
+        "name": "Sistema Solar",
+        "description": "Nosso sistema"
+      }
+    }
+  }
+}
+```
+
+*Delete Character*
+```json
+{
+  "message": "Personagem deletado com sucesso"
 }
 ```
 
