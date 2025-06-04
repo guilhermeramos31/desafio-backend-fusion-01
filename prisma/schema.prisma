@@ -1,0 +1,169 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  password     String
+  lastPassword String[] @default([])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+enum Climate {
+  ARID
+  ALPINE
+  CONTINENTAL
+  TROPICAL
+  TEMPERATE
+}
+
+enum Terrain {
+  DESERT
+  GRASSLANDS
+  MOUNTAINS
+  JUNGLE
+  URBAN
+  TUNDRA
+  OCEAN
+  BARREN
+  SWAMP
+}
+
+model Planet {
+  id String @id @default(uuid())
+  name String
+  climate Climate
+  terrain Terrain
+  population BigInt
+
+  starSystemId String
+  StarSystems StarSystems? @relation(fields: [starSystemId], references: [id])
+
+  character Character[]
+}
+
+model StarSystems {
+  id String @id @default(uuid())
+  name String @unique
+  description String
+
+  Planet Planet[]
+}
+
+enum Specie {
+  HUMAN
+  CHISS
+  TWILEK
+  ZABRAK
+  MIRIALAN
+  MIRALUKA
+  KEL_DOR
+  PANTORAN
+  ANAKIN
+  WOOKIEE
+  TOGRUTA
+  TRANDOSHAN
+  NAUTOLAN
+  MON_CALAMARI
+  RODIAN
+  BITH
+  GRAN
+  GAMORREAN
+  YODA_SPECIES
+  SITH_PUREBLOOD
+  ZELTRON
+  GEONOSIAN
+  NEIMOIDIAN
+  KAMINOAN
+  UMBARAN
+  HUTT
+  DUG
+  TUSKEN
+  EWOK
+  JAWA
+  GUNGAN
+  MANDALORIAN
+  SITH
+  DROID_ASTROMECH
+  DROID_PROTOCOL
+  DROID_BATTLE
+  DROID_ASSASSIN
+}
+
+enum Affiliation {
+  GALACTIC_REPUBLIC
+  GALACTIC_EMPIRE
+  FIRST_ORDER
+  NEW_REPUBLIC
+  CONFEDERACY_OF_INDEPENDENT_SYSTEMS
+  REBEL_ALLIANCE
+  RESISTANCE
+  HUTT_CARTEL
+  CRIMSON_DAWN
+  JEDI_ORDER
+  SITH_ORDER
+  JEDI_TEMPLE_GUARD
+  INQUISITORIUS
+  KNIGHTS_OF_REN
+  NIGHTSISTERS
+  WHILLS
+  CLONE_TROOPERS
+  STORMTROOPERS
+  DEATH_WATCH
+  BOUNTY_HUNTERS_GUILD
+  REBEL_CELL
+  PHOENIX_SQUADRON
+  ROGUE_SQUADRON
+  BLACK_SUN
+  PYKE_SYNDICATE
+  BOUNTY_HUNTERS
+  SMUGGLERS
+  PIRATES
+  MANDALORIANS
+  EWOKS
+  GUNGANS
+  TUSKEN_RAIDERS
+  JEDI_ARCHIVES
+  NEUTRAL
+  INDEPENDENT
+  MERCENARY
+  SCUM_AND_VILLAINY
+  DROID_ARMY
+  TRADE_FEDERATION
+  TECHNICAL_UNION
+}
+
+model Character {
+  id String @id @default(uuid())
+  name String
+  specie Specie
+  affiliation Affiliation
+
+  homePlanetId String
+  homePlanet Planet @relation(fields: [homePlanetId], references: [id])
+}
+
+model Spaceship {
+  id               String @id @default(uuid())
+  name             String @unique
+  model            String
+  manufacturer     String
+  passengerCapacity Int
+}
