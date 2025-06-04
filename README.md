@@ -120,7 +120,7 @@ src/
 │   │   │   │   └── pagination-planet.output.dto.ts        # Output DTO for paginated responses
 │   │   │   └── index.ts                                   # File for DTO exports
 │   │   ├── entity/
-│   │   │   └── planet.entity.ts/                          # Planet entity definition
+│   │   │   └── planet.entity.ts                           # Planet entity definition
 │   │   ├── planet.controller.ts                           # API route handlers
 │   │   ├── planet.module.ts                               # Module configuration
 │   │   └── planet.service.ts                              # Business logic/service layer

@@ -6,7 +6,7 @@ export const ApiFindAllPlanet = () => {
     ApiOperation({
       summary: 'Get all planets with pagination',
       description:
-        'Returns a paginated list of planet. Allows you to control the page, quantity per page and ordering.',
+        'Returns a paginated list of planets. Allows you to control the page, quantity per page and ordering.',
     }),
     ApiQuery({
       name: 'page',
