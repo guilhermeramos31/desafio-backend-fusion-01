@@ -39,7 +39,9 @@
       "@planet/*": ["modules/planet/*"],
       "@planet": ["modules/planet"],
       "@character/*": ["modules/character/*"],
-      "@character": ["modules/character"]
+      "@character": ["modules/character"],
+      "@spaceship/*": ["modules/spaceship/*"],
+      "@spaceship": ["modules/spaceship"]
     },
   }
 }
