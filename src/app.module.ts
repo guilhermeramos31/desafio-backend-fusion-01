@@ -7,6 +7,7 @@ import { AuthModule } from '@auth/auth.module';
 import { StarSystemModule } from '@star-system/star-system.module';
 import { PlanetModule } from '@planet/planet.module';
 import { CharacterModule } from '@character/character.module';
+import { SpaceshipModule } from '@spaceship/spaceship.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { CharacterModule } from '@character/character.module';
     StarSystemModule,
     PlanetModule,
     CharacterModule,
+    SpaceshipModule,
   ],
   providers: [AuthService],
 })
