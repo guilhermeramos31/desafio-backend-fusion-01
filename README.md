@@ -105,7 +105,7 @@ src/
 │   │   │   │   └── pagination-character.output.dto.ts     # Output DTO for paginated responses
 │   │   │   └── index.ts                                   # File for DTO exports
 │   │   ├── entity/
-│   │   │   └── character.entity.ts/                       # Character entity definition
+│   │   │   └── character.entity.ts                        # Character entity definition
 │   │   ├── character.controller.ts                        # API route handlers
 │   │   ├── character.module.ts                            # Module configuration
 │   │   └── character.service.ts                           # Business logic/service layer
